@@ -11,6 +11,7 @@ body {
 	height: 100%;
 	-webkit-font-smoothing: antialiased;
 	font-family: 'Poppins', sans-serif;
+	font-weight: 500;
 	font-size: 14px;
 	line-height: 1.5;
 }
@@ -270,8 +271,9 @@ header {
 .products__item-inner:hover {
 	cursor: pointer;
 	background-image: none;
-	transition: all 1s ease-in-out;
-	opacity: 1;
+	transition: none;
+	/* transition: all 0.5s ease-in-out; */
+	opacity: 0.9;
 	color: #5D41DE;
 	background-color: rgb(93, 65, 222, 0.5);
 }

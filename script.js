@@ -13,8 +13,7 @@
 // Advanced.
 // Дані по товарах повинні зберігатися в БД (наприклад, при додаванні нового товару йде відповідний запит на сервер і відбувається запис даних в БД).
 
-
-
+// Search by name
 let searchInput = document.querySelector(".search__input > input[type=text]");
 let searchButton = document.querySelector(".search__button.button--blue");
 let productsContent = document.querySelectorAll(".products__content .products__item");
@@ -52,12 +51,8 @@ cancelButton.addEventListener("click", function () {
 
 searchButton.addEventListener("click", searchByName);
 
-
-
-
-
-
-let sortToggler = document.querySelector('.toggler input[type="checkbox"]');
+// Sort by radius
+const sortToggler = document.querySelector('.toggler input[type="checkbox"]');
 
 function sortByRadius() {
   let planets = document.querySelectorAll(".products__item");
@@ -73,11 +68,10 @@ function sortByRadius() {
   return sortedPlanets;
 }
 
-
 sortToggler.addEventListener("change", () => {
-  let planetContainer = document.querySelector(".products__content");
-  let planets = document.querySelectorAll(".products__item");
-  
+  const planetContainer = document.querySelector(".products__content");
+  const planets = document.querySelectorAll(".products__item");
+
   if (sortToggler.checked) {
     // Sort planets by radius and add to container
     let sortedPlanets = sortByRadius();
@@ -85,7 +79,6 @@ sortToggler.addEventListener("change", () => {
       // Move the buttons inside the planet element
       let buttons = planet.querySelector(".products__item-buttons");
       planet.appendChild(buttons);
-      
       planetContainer.appendChild(planet);
 
 		let inner = planet.querySelector(".products__item-inner");
@@ -93,25 +86,17 @@ sortToggler.addEventListener("change", () => {
     });
   } else {
     // Reset to original order
-    planets.forEach((planet) => {
+      planets.forEach((planet) => {
       // Move the buttons back 
-      let buttons = planet.querySelector(".products__item-buttons");
-      planet.querySelector(".products__item-inner").appendChild(buttons);
-      
-      planetContainer.appendChild(planet);
+        let buttons = planet.querySelector(".products__item-buttons");
+        planet.querySelector(".products__item-inner").appendChild(buttons);
+        planetContainer.appendChild(planet);
 
-		let inner = planet.querySelector(".products__item-inner");
-		innerElements.forEach((inner) => {
-			inner.classList.remove("active");
-		});
+		  let innerElements = planet.querySelector(".products__item-inner");
+      innerElements.forEach((inner) => {
+        inner.classList.remove("active");
+      });
     });
   }
+  // TODO: soring isnt reseting to original order
 });
-
-
-
-
-
-
-
-

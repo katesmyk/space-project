@@ -50,6 +50,7 @@
 						<div class="count-total__content">
 							<h2>Total Population of Our Galaxy</h2>
 							<div class="count-total__buttons">
+								<button id="getDataBtn" onclick="getData()">Get data</button>
 								<button class="count-total__button count-total button--blue">Count</button>
 								<p><span class="count-total__total">100000</span> billions</p>
 							</div>
@@ -57,20 +58,19 @@
 					</div>
 				</div>
 			</section>
-	
 			<section class="right">
 				<div class="container">
 					<div class="products__content"">
 						<div class="products__item">
 							<div class="products__item-inner">
 								<div class="products__item-img">
-									<img src="static/img/Earth.svg" alt="earth">
+									<img id="planetImg" src="static/img/Earth.svg" alt="earth">
 								</div>
 								<div class="products__item-info">
-									<h2>Earth</h2>
-									<p>Sun distance: <span>149.8</span> M km</p>
-									<p>Radius: <span>6371</span> km</p>
-									<p>Population: <span>7.9</span> billion</p>
+									<h2 id="planetName">Earth</h2>
+									<p id="sunDistance">Sun distance: <span>149.8</span> M km</p>
+									<p id="radius">Radius: <span>6371</span> km</p>
+									<p id="population">Population: <span>7.9</span> billion</p>
 								</div>
 								<div class="products__item-buttons">
 									<button class="products__item button--blue">Edit</button>
@@ -136,4 +136,6 @@
 	</main>
 </body>
 <script src="script.js"></script>
+<script src="axiosRequests.js"></script>
+<script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </html>
