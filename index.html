@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="styles.css">
+	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins&display=swap">
+	<title>Space walk</title>
+</head>
+<body>
+	<header>
+		<div class="container">
+			<div class="header__inner">
+				<div class="header__logo">
+					<img src="static/img/logo.svg" alt="logo">
+				</div>
+				<div class="manage__content">
+					<div class="manage__buttons">
+						<button class="manage__button button--default">My Galaxy</button>
+						<button class="manage__button button--default">Add your Planet</button>
+					</div>
+				</div>
+				<div class="search__content">
+					<div class="search__input">
+						<input type="text" placeholder="...Type something">
+					</div>
+					<div class="search__buttons">
+						<button class="search__button button--blue">Search</button>
+						<button class="search__button button--red">Cancel</button>
+					</div>
+				</div>
+			</div>
+			</div>
+		</div>
+	</header>
+	<main>
+		<div class="container">
+			<section class="left">
+				<div class="container">
+					<div class="manage__inner">
+						<h1>Discover the Universe</h1>
+						<div class="sort__content">
+							<div class="toggler">
+								<input type="checkbox" id="toggle" class="toggle__input">
+								<label for="toggle" class="toggle__label"></label>
+								<label for="toggle" class="toggle__desc">Sort by Planet Radius</label>
+							</div>
+						</div>
+						<div class="count-total__content">
+							<h2>Total Population of Our Galaxy</h2>
+							<div class="count-total__buttons">
+								<button class="count-total__button count-total button--blue">Count</button>
+								<p><span class="count-total__total">100000</span> billions</p>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+	
+			<section class="right">
+				<div class="container">
+					<div class="products__content"">
+						<div class="products__item">
+							<div class="products__item-inner">
+								<div class="products__item-img">
+									<img src="static/img/Earth.svg" alt="earth">
+								</div>
+								<div class="products__item-info">
+									<h2>Earth</h2>
+									<p>Sun distance: <span>149.8</span> M km</p>
+									<p>Radius: <span>6371</span> km</p>
+									<p>Population: <span>7.9</span> billion</p>
+								</div>
+								<div class="products__item-buttons">
+									<button class="products__item button--blue">Edit</button>
+									<button class="products__item button--red">Delete</button>
+								</div>
+							</div>
+						</div>
+						<div class="products__item">
+							<div class="products__item-inner">
+								<div class="products__item-img">
+									<img src="static/img/Mars.svg" alt="mars">
+								</div>
+								<div class="products__item-info">
+									<h2>Mars</h2>
+									<p>Sun distance: <span>149.8</span> M km</p>
+									<p>Radius: <span>3325</span> km</p>
+									<p>Population: <span>7.9</span> billion</p>
+								</div>
+								<div class="products__item-buttons">
+									<button class="products__item button--blue">Edit</button>
+									<button class="products__item button--red">Delete</button>
+								</div>
+							</div>
+						</div>
+						<div class="products__item">
+							<div class="products__item-inner">
+								<div class="products__item-img">
+									<img src="static/img/Venus.svg" alt="venus">
+								</div>
+								<div class="products__item-info">
+									<h2>Venus</h2>
+									<p>Sun distance: <span>149.8</span> M km</p>
+									<p>Radius: <span>5484</span> km</p>
+									<p>Population: <span>7.9</span> billion</p>
+								</div>
+								<div class="products__item-buttons">
+									<button class="products__item button--blue">Edit</button>
+									<button class="products__item button--red">Delete</button>
+								</div>
+							</div>
+						</div>
+						<div class="products__item">
+							<div class="products__item-inner">
+								<div class="products__item-img">
+									<img src="static/img/Uranus.svg" alt="venus">
+								</div>
+								<div class="products__item-info">
+									<h2>Neptun</h2>
+									<p>Sun distance: <span>149.8</span> M km</p>
+									<p>Radius: <span>256</span> km</p>
+									<p>Population: <span>7.9 </span>billion</p>
+								</div>
+								<div class="products__item-buttons">
+									<button class="products__item button--blue">Edit</button>
+									<button class="products__item button--red">Delete</button>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</section>
+		</div>
+	</main>
+</body>
+<script src="script.js"></script>
+</html>

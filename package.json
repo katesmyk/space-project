@@ -1,0 +1,19 @@
+{
+  "name": "space-project",
+  "version": "1.0.0",
+  "description": "learning project",
+  "main": "script.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/katesmyk/space-project.git"
+  },
+  "author": "kate smyk",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/katesmyk/space-project/issues"
+  },
+  "homepage": "https://github.com/katesmyk/space-project#readme"
+}
