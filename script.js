@@ -100,3 +100,4 @@ sortToggler.addEventListener("change", () => {
   }
   // TODO: soring isnt reseting to original order
 });
+
