@@ -6,6 +6,7 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<link rel="stylesheet" href="styles.css">
 	<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins&display=swap">
+	<link rel="import" href="modal.html">
 	<title>Space walk</title>
 </head>
 <body>
@@ -17,8 +18,8 @@
 				</div>
 				<div class="manage__content">
 					<div class="manage__buttons">
-						<button class="manage__button button--default">My Galaxy</button>
-						<button class="manage__button button--default">Add your Planet</button>
+						<button id="myGalaxy" class="manage__button button--default">My Galaxy</button>
+						<button id="addBtn" class="manage__button button--default" onclick="openModal()">Add your Planet</button>
 					</div>
 				</div>
 				<div class="search__content">
@@ -27,7 +28,7 @@
 					</div>
 					<div class="search__buttons">
 						<button class="search__button button--blue">Search</button>
-						<button class="search__button button--red">Cancel</button>
+						<button class="search__button button--red" onclick="cancelSearch()">Cancel</button>
 					</div>
 				</div>
 			</div>
@@ -50,8 +51,8 @@
 						<div class="count-total__content">
 							<h2>Total Population of Our Galaxy</h2>
 							<div class="count-total__buttons">
-								<button id="countBtn" class="count-total__button count-total button--blue">Count</button>
-								<p id="countTotalVal"><span class="count-total__total">100000</span> billions</p>
+								<button id="countBtn" class="count-total__button count-total button--blue" onclick="countPlanetPopulation()">Count</button>
+								<p id="countTotalVal"><span class="count-total__total">1000</span> billions</p>
 							</div>
 						</div>
 					</div>
@@ -63,6 +64,41 @@
 					</div>
 				</div>
 			</section>
+			<!-- <div id="modal-placeholder"></div> -->
+			<div class="modal">
+				<div class="modal__inner">
+					<div class="modal__content">
+						<div class="modal__title">
+							<h2>Add your Planet</h2>
+							<button class="modal__close" onclick="closeModal()"></button>
+						</div>
+						<div class="modal__body">
+							<div class="modal__form">
+								<div class="modal__input">
+									<label for="planetName">Planet Name</label>
+									<input type="text" id="planetName" placeholder="...Type something" required>
+								</div>
+								<div class="modal__input">
+									<label for="sunDistance">Sun distance</label>
+									<input type="text" id="sunDistance" placeholder="...Type something" required>
+								</div>
+								<div class="modal__input">
+									<label for="planetRadius">Planet Radius</label>
+									<input type="text" id="planetRadius" placeholder="...Type something" required>
+								</div>
+								<div class="modal__input">
+									<label for="planetPopulation">Population</label>
+									<input type="text" id="planetPopulation" placeholder="...Type something" required>
+								</div>
+							</div>
+						</div>
+						<div class="modal__footer">
+							<button id="addPlanet" class="modal__button button--blue" onclick="addProduct()">Add Planet</button>
+							<div class="field__error"> Fields are empty</div>
+						</div>
+					</div>
+				</div>
+			</div>
 		</div>
 	</main>
 </body>

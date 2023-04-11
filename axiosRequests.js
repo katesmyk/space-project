@@ -1,15 +1,19 @@
+const BASE_TOKEN = "9de50710-8482-48e8-9e1c-dc5573536a97"
+const BEARER_TOKEN = "Bearer " + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODEzNzg1MzcsImR0YWJsZV91dWlkIjoiOWRlNTA3MTAtODQ4Mi00OGU4LTllMWMtZGM1NTczNTM2YTk3IiwidXNlcm5hbWUiOiIiLCJwZXJtaXNzaW9uIjoicnciLCJhcHBfbmFtZSI6Im15YXBwIn0.nP1Hxs692UHF6w0-D47a91lGuOADCUucvMnmvYO5y4g"
+
 const planetListEl = document.querySelector("#planetList");
 const imgFolder = "static/img/planets/";
 
 const options = {
   method: "GET",
-  url: "https://cloud.seatable.io/dtable-server/api/v1/dtables/9de50710-8482-48e8-9e1c-dc5573536a97/rows/",
+  url: `https://cloud.seatable.io/dtable-server/api/v1/dtables/${BASE_TOKEN}/rows/`,
   params: {table_name: "Table1"},
   headers: {
     accept: "application/json",
-    authorization: "Bearer eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODEzNzg1MzcsImR0YWJsZV91dWlkIjoiOWRlNTA3MTAtODQ4Mi00OGU4LTllMWMtZGM1NTczNTM2YTk3IiwidXNlcm5hbWUiOiIiLCJwZXJtaXNzaW9uIjoicnciLCJhcHBfbmFtZSI6Im15YXBwIn0.nP1Hxs692UHF6w0-D47a91lGuOADCUucvMnmvYO5y4g",
+    authorization: BEARER_TOKEN,
   }
 };
+
 
 const planetTemplate = (planet) => `
   <div class="products__item-inner">
@@ -92,17 +96,11 @@ searchProduct();
 
 
 function cancelSearch() {
-  const searchInput = document.querySelector(".search__input > input[type=text]");
-  const cancelButtonEl = document.querySelector(".search__button.button--red");
-
-  cancelButtonEl.addEventListener("click", function () {
-    planetListEl.innerHTML = "";
-    searchInput.value = "";
-    fetchData();
-  });
+  const searchInput = document.querySelector(".search__input > input[type=text]")
+  planetListEl.innerHTML = "";
+  searchInput.value = "";
+  fetchData();
 }
-
-cancelSearch();
 
 
 function sortByRadius() {
@@ -137,22 +135,73 @@ function sortByRadius() {
 sortByRadius();
 
 function countPlanetPopulation() {
-  const populationBtn = document.querySelector("#countBtn");
   const populationEl = document.querySelector("#countTotalVal > span");
-  
-  populationBtn.addEventListener("click", function () {
-    axios
-      .request(options)
-      .then(function (response) {
-        const planets = response.data.rows;
-        let totalPopulation = 0;
-        planets.forEach(planet => {
-          totalPopulation += parseInt(planet.planet_Population);
-        });
-        populationEl.textContent = totalPopulation;
+
+  axios
+    .request(options)
+    .then(function (response) {
+      const planets = response.data.rows;
+      let totalPopulation = 0;
+      planets.forEach(planet => {
+        totalPopulation += parseInt(planet.planet_Population);
       });
-  });
+      populationEl.innerHTML = totalPopulation.toLocaleString();
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
 }
 
-countPlanetPopulation();
+function addProduct() {
+  const nameInput = document.querySelector("#planetName");
+  const sunDistanceInput = document.querySelector("#sunDistance");
+  const radiusInput = document.querySelector("#planetRadius");
+  const populationInput = document.querySelector("#planetPopulation");
+  
+  const planetName = nameInput.value.trim();
+  const planetSunDistance = sunDistanceInput.value.trim();
+  const planetRadius = radiusInput.value.trim();
+  const planetPopulation = populationInput.value.trim();
+  
+  // Check if any of the input fields is empty
+  const inputs = document.querySelectorAll(".modal__input input");
 
+  inputs.forEach(input => {
+    const value = input.value.trim();
+    const error = input.nextElementSibling;
+    if (!value) {
+      error.style.display = "block";
+      isValid = false;
+    } else {
+      error.style.display = "none";
+    }
+  });
+
+  const planet = {
+    planet_Name: planetName,
+    sun_Distance: planetSunDistance,
+    planet_Radius: planetRadius,
+    planet_Population: planetPopulation,
+    img: `/static/images/planets/Saturn.webp`
+  };
+
+  const optionsUpdate = {
+    method: 'POST',
+    url: `https://cloud.seatable.io/dtable-server/api/v1/dtables/${BASE_TOKEN}/rows/`,
+    headers: {
+      accept: 'application/json',
+      'content-type': 'application/json',
+      authorization: BEARER_TOKEN,
+    },
+    data: {table_name: 'Table1', row: planet}
+  };
+  axios
+    .request(optionsUpdate)
+    .then(function (response) {
+      console.log(response);
+      fetchData();
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
+}
