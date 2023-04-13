@@ -1,5 +1,5 @@
 const BASE_TOKEN = "9de50710-8482-48e8-9e1c-dc5573536a97"
-const BEARER_TOKEN = "Bearer " + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODEzNzg1MzcsImR0YWJsZV91dWlkIjoiOWRlNTA3MTAtODQ4Mi00OGU4LTllMWMtZGM1NTczNTM2YTk3IiwidXNlcm5hbWUiOiIiLCJwZXJtaXNzaW9uIjoicnciLCJhcHBfbmFtZSI6Im15YXBwIn0.nP1Hxs692UHF6w0-D47a91lGuOADCUucvMnmvYO5y4g"
+const BEARER_TOKEN = "Bearer " + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODE2NjA4MDcsImR0YWJsZV91dWlkIjoiOWRlNTA3MTAtODQ4Mi00OGU4LTllMWMtZGM1NTczNTM2YTk3IiwidXNlcm5hbWUiOiIiLCJwZXJtaXNzaW9uIjoicnciLCJhcHBfbmFtZSI6Im15YXBwIn0.TlaUKQKjqM5x8Muw_d1jgWP_oKK3h1avLDfJEKjk3qg"
 
 const planetListEl = document.querySelector("#planetList");
 const imgFolder = "static/img/planets/";
@@ -56,6 +56,7 @@ function fetchData() {
 }
 
 document.addEventListener("DOMContentLoaded", fetchData);
+
 
 function searchProduct() {
   const searchInput = document.querySelector(".search__input > input[type=text]");
@@ -166,16 +167,14 @@ function addProduct() {
   // Check if any of the input fields is empty
   const inputs = document.querySelectorAll(".modal__input input");
 
-  inputs.forEach(input => {
-    const value = input.value.trim();
-    const error = input.nextElementSibling;
-    if (!value) {
-      error.style.display = "block";
-      isValid = false;
-    } else {
-      error.style.display = "none";
-    }
-  });
+  // for (const input of inputs) {
+  //   if (input.value.trim() === "") {
+  //     input.classList.add("error");
+  //     return;
+  //   } else {
+  //     input.classList.remove("error");
+  //   }
+  // }
 
   const planet = {
     planet_Name: planetName,
@@ -205,3 +204,97 @@ function addProduct() {
       console.error(error);
     });
 }
+
+
+function deleteProduct() {
+  planetListEl.addEventListener("click", function (event) {
+    if (event.target.classList.contains("button--red")) {
+      const planetName = event.target.parentElement.previousElementSibling.firstElementChild.innerHTML;
+
+        axios
+          .request(options)
+          .then(function (response) {
+            const rows = response.data.rows;
+            for (let i = 0; i < rows.length; i++) {
+              const row = rows[i];
+              if (row.planet_Name === planetName) {
+                const rowId = row._id;
+                console.log(rowId);
+                const optionsDelete = {
+                  method: 'DELETE',
+                  url: `https://cloud.seatable.io/dtable-server/api/v1/dtables/${BASE_TOKEN}/rows/`,
+                  headers: {
+                    accept: 'application/json',
+                    'content-type': 'application/json',
+                    authorization: BEARER_TOKEN,
+                  },
+                  data: {table_name: 'Table1', row_id: `${rowId}`}
+                };
+              
+              axios
+                .request(optionsDelete)
+                .then(function (response) {
+                  fetchData();
+                })
+                .catch(function (error) {
+                  console.error(error);
+                });
+
+              break; // exit the loop once the row is found
+            }
+          }
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+    }
+  });
+}
+
+deleteProduct();
+
+function editProduct() {
+   planetListEl.addEventListener("click", function (event) {
+    if (event.target.classList.contains("button--blue")) {
+      const planetName = event.target.parentElement.previousElementSibling.firstElementChild.innerHTML;
+    axios
+          .request(options)
+          .then(function (response) {
+            const rows = response.data.rows;
+            for (let i = 0; i < rows.length; i++) {
+              const row = rows[i];
+              if (row.planet_Name === planetName) {
+                const rowId = row._id;
+                console.log(rowId);
+                const optionsEdit = {
+                  method: 'PUT',
+                  url: `https://cloud.seatable.io/dtable-server/api/v1/dtables/${BASE_TOKEN}/rows/`,
+                  headers: {
+                    accept: 'application/json',
+                    'content-type': 'application/json',
+                    authorization: BEARER_TOKEN,
+                  },
+                  data: {row_id: `${rowId}`, table_name: 'Table1'}
+                };
+                axios
+                .request(optionsEdit)
+                .then(function (response) {
+                  console.log(response);
+                  fetchData();
+                })
+                .catch(function (error) {
+                  console.error(error);
+                });
+
+              break; // exit the loop once the row is found
+            }
+          }
+        })
+        .catch(function (error) {
+          console.error(error);
+        });
+      }
+    });
+  }
+
+editProduct();

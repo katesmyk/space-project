@@ -79,6 +79,7 @@ button {
 .button--red {
 	background-color:rgb(255, 52, 43, 0.15);
 	color: #FF342B;
+	z-index: 1600;
 }
 
 .button--red:hover {
@@ -358,11 +359,6 @@ header {
 	margin-right: 10px;
 }
 
-.field__error {
-	display: none;
-	font-size: 12px;
-	color: #FF342B;
-}
 
 .modal__form input[type="text"] {
 	margin-bottom: 20px;
