@@ -230,6 +230,8 @@ function addProduct() {
     .then(function (response) {
       console.log(response);
       fetchData();
+      const modal = document.getElementById("add-modal");
+        modal.style.display = "none";
     })
     .catch(function (error) {
       console.error(error);
