@@ -316,12 +316,6 @@ header {
 	color: #fff;
 }
 
-form {
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-}
 
 .modal {
 	display: none;
@@ -366,6 +360,26 @@ form {
 	display: grid;
 	grid-template-columns: 1fr 2fr;
 	align-items: center;
+}
+
+.modal__input + span {
+	position: relative;
+}
+
+.modal__input + span::before {
+	position: absolute;
+	right: -20px;
+	top: 5px;
+
+}
+
+.modal__input:invalid + span::before {
+	content: "✖";
+	color: red;
+}
+.modal__input:valid+span::before {
+	content: "✓";
+	color: green;
 }
 
 .modal__input label {
