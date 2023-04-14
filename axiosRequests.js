@@ -36,23 +36,49 @@ const planetTemplate = (planet) => `
   </div>
 `;
 
-function fetchData() {
-    axios
-      .request(options)
-      .then(function (response) {
-        const planets = response.data.rows;
+// function fetchData() {
+//     axios
+//       .request(options)
+//       .then(function (response) {
+//         const planets = response.data.rows;
         
-        planetListEl.innerHTML = "";
-        for (const planet of planets) {
-          const planetEl = document.createElement("div");
-          planetEl.classList.add("products__item");
-          planetEl.innerHTML = planetTemplate(planet);
-          planetListEl.appendChild(planetEl);
-        }
-      })
-      .catch(function (error) {
-        console.error(error);
-      });
+//         planetListEl.innerHTML = "";
+//         for (const planet of planets) {
+//           const planetEl = document.createElement("div");
+//           planetEl.classList.add("products__item");
+//           planetEl.innerHTML = planetTemplate(planet);
+//           planetListEl.appendChild(planetEl);
+//         }
+//       })
+//       .catch(function (error) {
+//         console.error(error);
+//       });
+// }
+
+// document.addEventListener("DOMContentLoaded", fetchData);
+
+function fetchData() {
+  axios
+    .request(options)
+    .then(function (response) {
+      const planets = response.data.rows;
+
+      planetListEl.innerHTML = "";
+      for (const planet of planets) {
+        const planetEl = document.createElement("div");
+        planetEl.classList.add("products__item");
+        planetEl.innerHTML = planetTemplate(planet);
+        planetListEl.appendChild(planetEl);
+      }
+
+      const editBtns = document.querySelectorAll("#editBtn");
+      for (const editBtn of editBtns) {
+        editBtn.addEventListener("click", editProduct);
+      }
+    })
+    .catch(function (error) {
+      console.error(error);
+    });
 }
 
 document.addEventListener("DOMContentLoaded", fetchData);
@@ -255,97 +281,79 @@ function deleteProduct() {
 
 deleteProduct();
 
+function getRowId(rows) {
+  const planetNameElement = document.querySelector(".planet-name");
+  const planetName = planetNameElement.innerHTML;
+  console.log(planetName)
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    if (row.planet_Name === planetName) {
+      console.log(row._id);
+      let rowId = row._id;
+      return rowId; 
+    }
+  }
+  return null; 
+}
+
 
 function editProduct() {
-  document.addEventListener("DOMContentLoaded", function (event) {
-    const planetListEl = document.getElementById("planetListEl");
-    planetListEl.addEventListener("click", function (event) {
-      if (event.target.id === "editBtn") {
-        const planetName = event.target.parentElement.previousElementSibling.firstElementChild.innerHTML;
-        console.log(`Editing planet: ${planetName}`);
+  const planetNameInput = document.querySelector("#planetName");
+  const sunDistanceInput = document.querySelector("#sunDistance");
+  const radiusInput = document.querySelector("#planetRadius");
+  const populationInput = document.querySelector("#planetPopulation");
+
+  const saveBtn = document.querySelector("#add-modal .modal__button.button--blue");
+
+  // When Save Changes button is clicked, send a PUT request to update the planet data
+saveBtn.addEventListener("click", function (event) {
+  const planetName = planetNameInput.value;
+  const sunDistance = sunDistanceInput.value;
+  const radius = radiusInput.value;
+  const population = populationInput.value;
+
+  axios(options)
+    .then(function (response) {
+      const rows = response.data.rows;
+      const rowId = getRowId(rows);
+      if (rowId !== null) {
+        const planet = {
+          planet_Name: planetName,
+          sun_Distance: sunDistance,
+          planet_Radius: radius,
+          planet_Population: population,
+        };
+
+        const optionsEdit = {
+          method: 'PUT',
+          url: `https://cloud.seatable.io/dtable-server/api/v1/dtables/${BASE_TOKEN}/rows/`,
+          headers: {
+            accept: 'application/json',
+            'content-type': 'application/json',
+            authorization: BEARER_TOKEN,
+          },
+          data: {table_name: 'Table1', row_id: `${rowId}`, row: planet},
+        };
+
+        axios(optionsEdit)
+          .then(function (response) {
+            console.log(response);
+            fetchData();
+          })
+          .catch(function (error) {
+            console.error(error);
+          });
+
+        const modal = document.getElementById("add-modal");
+        modal.style.display = "none";
+      } else {
+        console.log('Planet name not found');
       }
+    })
+    .catch(function (error) {
+      console.error(error);
     });
-  });
+})
 }
 
-
-//       axios
-//         .request(options)
-//         .then(function (response) {
-//           const rows = response.data.rows;
-//           for (let i = 0; i < rows.length; i++) {
-//             const row = rows[i];
-//             if (row.planet_Name === planetName) {
-//               const rowId = row._id;
-
-//               const nameInput = document.querySelector("#editplanetName");
-//               const sunDistanceInput = document.querySelector("#editsunDistance");
-//               const radiusInput = document.querySelector("#editplanetRadius");
-//               const populationInput = document.querySelector("#editplanetPopulation");
-  
-//               const planetName = nameInput.value.trim();
-//               const planetSunDistance = sunDistanceInput.value.trim();
-//               const planetRadius = radiusInput.value.trim();
-//               const planetPopulation = populationInput.value.trim();
-
-//               const planet = {
-//                 planet_Name: planetName,
-//                 sun_Distance: planetSunDistance,
-//                 planet_Radius: planetRadius,
-//                 planet_Population: planetPopulation,
-//               };
-
-//               const optionsEdit = {
-//                 method: 'PUT',
-//                 url: `https://cloud.seatable.io/dtable-server/api/v1/dtables/${BASE_TOKEN}/rows/`,
-//                 headers: {
-//                 accept: 'application/json',
-//                 'content-type': 'application/json',
-//                 authorization: BEARER_TOKEN,
-//               },
-//               data: {table_name: 'Table1', row_id: `${rowId}`, row: planet},
-//             };
-
-//             axios
-//               .request(optionsEdit)
-//               .then(function (response) {
-//               // console.log(response);
-//                   // fetchData();
-//                 })
-//                 .catch(function (error) {
-//                   console.error(error);
-//                 });
-//               break; // exit the loop once the row is found
-//             }
-//           }
-//         })
-//         .catch(function (error) {
-//           console.error(error);
-//         });
-//     } else {
-//       console.log("no edit");
-//     }
-//   });
-// });
-// }
-
-
-function openEditModal() {
-  planetListEl.addEventListener("click", function (event) {
-    if (event.target.classList.contains("button--blue")) {
-      const modal = document.querySelector('#edit-modal');
-      modal.style.display = 'flex';
-    }
-  });
-}
-
-function closeEditModal() {
-  console.log("close modal");
-  const modal = document.querySelector('#edit-modal');
-  modal.style.display = 'none';
-}
-
-document.addEventListener("DOMContentLoaded", function () {
-  openEditModal();
-});
 

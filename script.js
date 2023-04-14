@@ -100,26 +100,7 @@
 //   }
 //   // TODO: soring isnt reseting to original order
 // });
-// function openModal() {
-//   const modal = document.querySelector('.modal');
-//   modal.style.display = 'flex';
-// }
 
-// function closeModal() {
-//   const modal = document.querySelector('.modal');
-//   modal.style.display = 'none';
-// }
-// window.onclick = function(event) {
-//   const modal = document.querySelector('.modal');
-//   if (event.target == modal) {
-//     modal.style.display = 'none';
-//   }
-// }
-
-// import("./modal.html").then(modalContent => {
-//   const modalPlaceholder = document.querySelector("#modal-placeholder");
-//   modalPlaceholder.innerHTML = modalContent.default;
-// });
 
 
 function openModal(mode) {
