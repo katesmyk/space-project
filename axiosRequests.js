@@ -24,14 +24,14 @@ const planetTemplate = (planet) => `
       </picture>
     </div>
     <div class="products__item-info">
-      <h2>${planet.planet_Name}</h2>
+      <h2 class="planet-name">${planet.planet_Name}</h2>
       <p>Sun distance: <span>${planet.sun_Distance}</span> M km</p>
       <p>Radius: <span>${planet.planet_Radius}</span> km</p>
       <p>Population: <span>${planet.planet_Population}</span> billions</p>
     </div>
     <div class="products__item-buttons">
-      <button class="products__item button--blue">Edit</button>
-      <button class="products__item button--red">Delete</button>
+      <button id="editBtn" class="products__item button--blue" onclick="openModal('edit')">Edit</button>
+      <button id="deleteBtn" class="products__item button--red">Delete</button>
     </div>
   </div>
 `;
@@ -154,6 +154,7 @@ function countPlanetPopulation() {
 }
 
 function addProduct() {
+
   const nameInput = document.querySelector("#planetName");
   const sunDistanceInput = document.querySelector("#sunDistance");
   const radiusInput = document.querySelector("#planetRadius");
@@ -164,17 +165,20 @@ function addProduct() {
   const planetRadius = radiusInput.value.trim();
   const planetPopulation = populationInput.value.trim();
   
-  // Check if any of the input fields is empty
-  const inputs = document.querySelectorAll(".modal__input input");
+  if (!planetName) {
+    console.log("Planet name cannot be empty.");
+    return;
+  }
 
-  // for (const input of inputs) {
-  //   if (input.value.trim() === "") {
-  //     input.classList.add("error");
-  //     return;
-  //   } else {
-  //     input.classList.remove("error");
-  //   }
-  // }
+  if (!/^[a-zA-Z]+$/.test(planetName)) {
+    console.log("Planet name must contain only alphabets.");
+    return;
+  }
+  // Check if sun distance, radius, and population are numbers or floats
+  if (isNaN(planetSunDistance) || isNaN(planetRadius) || isNaN(planetPopulation)) {
+    console.log("Sun distance, radius, and population must be numbers or floats.");
+    return;
+  }
 
   const planet = {
     planet_Name: planetName,
@@ -194,6 +198,7 @@ function addProduct() {
     },
     data: {table_name: 'Table1', row: planet}
   };
+
   axios
     .request(optionsUpdate)
     .then(function (response) {
@@ -205,12 +210,10 @@ function addProduct() {
     });
 }
 
-
 function deleteProduct() {
   planetListEl.addEventListener("click", function (event) {
     if (event.target.classList.contains("button--red")) {
       const planetName = event.target.parentElement.previousElementSibling.firstElementChild.innerHTML;
-
         axios
           .request(options)
           .then(function (response) {
@@ -219,7 +222,6 @@ function deleteProduct() {
               const row = rows[i];
               if (row.planet_Name === planetName) {
                 const rowId = row._id;
-                console.log(rowId);
                 const optionsDelete = {
                   method: 'DELETE',
                   url: `https://cloud.seatable.io/dtable-server/api/v1/dtables/${BASE_TOKEN}/rows/`,
@@ -253,48 +255,97 @@ function deleteProduct() {
 
 deleteProduct();
 
-function editProduct() {
-   planetListEl.addEventListener("click", function (event) {
-    if (event.target.classList.contains("button--blue")) {
-      const planetName = event.target.parentElement.previousElementSibling.firstElementChild.innerHTML;
-    axios
-          .request(options)
-          .then(function (response) {
-            const rows = response.data.rows;
-            for (let i = 0; i < rows.length; i++) {
-              const row = rows[i];
-              if (row.planet_Name === planetName) {
-                const rowId = row._id;
-                console.log(rowId);
-                const optionsEdit = {
-                  method: 'PUT',
-                  url: `https://cloud.seatable.io/dtable-server/api/v1/dtables/${BASE_TOKEN}/rows/`,
-                  headers: {
-                    accept: 'application/json',
-                    'content-type': 'application/json',
-                    authorization: BEARER_TOKEN,
-                  },
-                  data: {row_id: `${rowId}`, table_name: 'Table1'}
-                };
-                axios
-                .request(optionsEdit)
-                .then(function (response) {
-                  console.log(response);
-                  fetchData();
-                })
-                .catch(function (error) {
-                  console.error(error);
-                });
 
-              break; // exit the loop once the row is found
-            }
-          }
-        })
-        .catch(function (error) {
-          console.error(error);
-        });
+function editProduct() {
+  document.addEventListener("DOMContentLoaded", function (event) {
+    const planetListEl = document.getElementById("planetListEl");
+    planetListEl.addEventListener("click", function (event) {
+      if (event.target.id === "editBtn") {
+        const planetName = event.target.parentElement.previousElementSibling.firstElementChild.innerHTML;
+        console.log(`Editing planet: ${planetName}`);
       }
     });
-  }
+  });
+}
 
-editProduct();
+
+//       axios
+//         .request(options)
+//         .then(function (response) {
+//           const rows = response.data.rows;
+//           for (let i = 0; i < rows.length; i++) {
+//             const row = rows[i];
+//             if (row.planet_Name === planetName) {
+//               const rowId = row._id;
+
+//               const nameInput = document.querySelector("#editplanetName");
+//               const sunDistanceInput = document.querySelector("#editsunDistance");
+//               const radiusInput = document.querySelector("#editplanetRadius");
+//               const populationInput = document.querySelector("#editplanetPopulation");
+  
+//               const planetName = nameInput.value.trim();
+//               const planetSunDistance = sunDistanceInput.value.trim();
+//               const planetRadius = radiusInput.value.trim();
+//               const planetPopulation = populationInput.value.trim();
+
+//               const planet = {
+//                 planet_Name: planetName,
+//                 sun_Distance: planetSunDistance,
+//                 planet_Radius: planetRadius,
+//                 planet_Population: planetPopulation,
+//               };
+
+//               const optionsEdit = {
+//                 method: 'PUT',
+//                 url: `https://cloud.seatable.io/dtable-server/api/v1/dtables/${BASE_TOKEN}/rows/`,
+//                 headers: {
+//                 accept: 'application/json',
+//                 'content-type': 'application/json',
+//                 authorization: BEARER_TOKEN,
+//               },
+//               data: {table_name: 'Table1', row_id: `${rowId}`, row: planet},
+//             };
+
+//             axios
+//               .request(optionsEdit)
+//               .then(function (response) {
+//               // console.log(response);
+//                   // fetchData();
+//                 })
+//                 .catch(function (error) {
+//                   console.error(error);
+//                 });
+//               break; // exit the loop once the row is found
+//             }
+//           }
+//         })
+//         .catch(function (error) {
+//           console.error(error);
+//         });
+//     } else {
+//       console.log("no edit");
+//     }
+//   });
+// });
+// }
+
+
+function openEditModal() {
+  planetListEl.addEventListener("click", function (event) {
+    if (event.target.classList.contains("button--blue")) {
+      const modal = document.querySelector('#edit-modal');
+      modal.style.display = 'flex';
+    }
+  });
+}
+
+function closeEditModal() {
+  console.log("close modal");
+  const modal = document.querySelector('#edit-modal');
+  modal.style.display = 'none';
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+  openEditModal();
+});
+
