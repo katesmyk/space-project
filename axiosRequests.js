@@ -281,18 +281,22 @@ function deleteProduct() {
 
 deleteProduct();
 
+
+// TODO: Get the row id of the planet that is being edited
+
 function getRowId(rows) {
-  const planetNameElement = document.querySelector(".planet-name");
-  const planetName = planetNameElement.innerHTML;
-  console.log(planetName)
-  for (let i = 0; i < rows.length; i++) {
-    const row = rows[i];
-    if (row.planet_Name === planetName) {
-      console.log(row._id);
-      let rowId = row._id;
-      return rowId; 
-    }
+const planetNameElement = document.querySelector(".planet-name");
+const planetName = planetNameElement.innerHTML.trim().toLowerCase();
+
+for (let i = 0; i < rows.length; i++) {
+  const row = rows[i];
+  const rowPlanetName = row.planet_Name.trim().toLowerCase();
+  if (rowPlanetName === planetName) {
+    console.log(row._id);
+    let rowId = row._id;
+    return rowId; 
   }
+}
   return null; 
 }
 
