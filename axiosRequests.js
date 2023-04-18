@@ -1,8 +1,11 @@
 const BASE_TOKEN = "9de50710-8482-48e8-9e1c-dc5573536a97"
-const BEARER_TOKEN = "Bearer " + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODE2NjA4MDcsImR0YWJsZV91dWlkIjoiOWRlNTA3MTAtODQ4Mi00OGU4LTllMWMtZGM1NTczNTM2YTk3IiwidXNlcm5hbWUiOiIiLCJwZXJtaXNzaW9uIjoicnciLCJhcHBfbmFtZSI6Im15YXBwIn0.TlaUKQKjqM5x8Muw_d1jgWP_oKK3h1avLDfJEKjk3qg"
+const BEARER_TOKEN = "Bearer " + "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJleHAiOjE2ODIwOTQzODMsImR0YWJsZV91dWlkIjoiOWRlNTA3MTAtODQ4Mi00OGU4LTllMWMtZGM1NTczNTM2YTk3IiwidXNlcm5hbWUiOiIiLCJwZXJtaXNzaW9uIjoicnciLCJhcHBfbmFtZSI6Im15YXBwIn0.GqX586_6GAY_ZP_cwkjPVzEUnEgjSKOrQ5u864CE7bM"
+// TODO: export constants from a separate file
+
 
 const planetListEl = document.querySelector("#planetList");
 const imgFolder = "static/img/planets/";
+
 
 const options = {
   method: "GET",
@@ -35,27 +38,6 @@ const planetTemplate = (planet) => `
     </div>
   </div>
 `;
-
-// function fetchData() {
-//     axios
-//       .request(options)
-//       .then(function (response) {
-//         const planets = response.data.rows;
-        
-//         planetListEl.innerHTML = "";
-//         for (const planet of planets) {
-//           const planetEl = document.createElement("div");
-//           planetEl.classList.add("products__item");
-//           planetEl.innerHTML = planetTemplate(planet);
-//           planetListEl.appendChild(planetEl);
-//         }
-//       })
-//       .catch(function (error) {
-//         console.error(error);
-//       });
-// }
-
-// document.addEventListener("DOMContentLoaded", fetchData);
 
 function fetchData() {
   axios
@@ -232,6 +214,10 @@ function addProduct() {
       fetchData();
       const modal = document.getElementById("add-modal");
         modal.style.display = "none";
+        nameInput.value = "";
+        sunDistanceInput.value = "";
+        radiusInput.value = "";
+        populationInput.value = "";
     })
     .catch(function (error) {
       console.error(error);
@@ -302,8 +288,25 @@ for (let i = 0; i < rows.length; i++) {
   return null; 
 }
 
-
 function editProduct() {
+  const productCard = document.querySelector(".products__item");
+  const planetNameElement = document.querySelector(".planet-name");
+  const sunDistanceElement = document.querySelector(".products__item-info > p:nth-child(2) > span");
+  const radiusElement = document.querySelector(".products__item-info > p:nth-child(3) > span");
+  const populationElement = document.querySelector(".products__item-info > p:nth-child(4) > span");
+
+  productCard.addEventListener("click", function (event) {
+    const planetName = planetNameElement.textContent;
+    const sunDistance = sunDistanceElement.textContent;
+    const radius = radiusElement.textContent;
+    const population = populationElement.textContent;
+
+    planetNameInput.value = planetName;
+    sunDistanceInput.value = sunDistance;
+    radiusInput.value = radius;
+    populationInput.value = population;
+  });
+
   const planetNameInput = document.querySelector("#planetName");
   const sunDistanceInput = document.querySelector("#sunDistance");
   const radiusInput = document.querySelector("#planetRadius");
@@ -312,54 +315,54 @@ function editProduct() {
   const saveBtn = document.querySelector("#add-modal .modal__button.button--blue");
 
   // When Save Changes button is clicked, send a PUT request to update the planet data
-saveBtn.addEventListener("click", function (event) {
-  const planetName = planetNameInput.value;
-  const sunDistance = sunDistanceInput.value;
-  const radius = radiusInput.value;
-  const population = populationInput.value;
+  saveBtn.addEventListener("click", function (event) {
+    const planetName = planetNameInput.value;
+    const sunDistance = sunDistanceInput.value;
+    const radius = radiusInput.value;
+    const population = populationInput.value;
 
-  axios(options)
-    .then(function (response) {
-      const rows = response.data.rows;
-      const rowId = getRowId(rows);
-      if (rowId !== null) {
-        const planet = {
-          planet_Name: planetName,
-          sun_Distance: sunDistance,
-          planet_Radius: radius,
-          planet_Population: population,
-        };
+    axios(options)
+      .then(function (response) {
+        const rows = response.data.rows;
+        const rowId = getRowId(rows);
+        if (rowId !== null) {
+          const planet = {
+            planet_Name: planetName,
+            sun_Distance: sunDistance,
+            planet_Radius: radius,
+            planet_Population: population,
+          };
 
-        const optionsEdit = {
-          method: 'PUT',
-          url: `https://cloud.seatable.io/dtable-server/api/v1/dtables/${BASE_TOKEN}/rows/`,
-          headers: {
-            accept: 'application/json',
-            'content-type': 'application/json',
-            authorization: BEARER_TOKEN,
-          },
-          data: {table_name: 'Table1', row_id: `${rowId}`, row: planet},
-        };
+          const optionsEdit = {
+            method: 'PUT',
+            url: `https://cloud.seatable.io/dtable-server/api/v1/dtables/${BASE_TOKEN}/rows/`,
+            headers: {
+              accept: 'application/json',
+              'content-type': 'application/json',
+              authorization: BEARER_TOKEN,
+            },
+            data: {table_name: 'Table1', row_id: `${rowId}`, row: planet},
+          };
 
-        axios(optionsEdit)
-          .then(function (response) {
-            console.log(response);
-            fetchData();
-          })
-          .catch(function (error) {
-            console.error(error);
-          });
+          axios(optionsEdit)
+            .then(function (response) {
+              console.log(response);
+              fetchData();
+            })
+            .catch(function (error) {
+              console.error(error);
+            });
 
-        const modal = document.getElementById("add-modal");
-        modal.style.display = "none";
-      } else {
-        console.log('Planet name not found');
-      }
-    })
-    .catch(function (error) {
-      console.error(error);
-    });
-})
+          const modal = document.getElementById("add-modal");
+          modal.style.display = "none";
+        } else {
+          console.log('Planet name not found');
+        }
+      })
+      .catch(function (error) {
+        console.error(error);
+      });
+  });
 }
 
 
