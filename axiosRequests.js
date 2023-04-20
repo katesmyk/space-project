@@ -299,10 +299,11 @@ function editProduct() {
   const sunDistanceInput = document.querySelector("#sunDistance");
   const radiusInput = document.querySelector("#planetRadius");
   const populationInput = document.querySelector("#planetPopulation");
+  const error = document.querySelector(".error");
 
   const saveBtn = document.querySelector("#add-modal .modal__button.button--blue");
 
-  if(!planetNameInput || !sunDistanceInput || !radiusInput || !populationInput || !saveBtn) {
+  if(!planetNameInput.value || !sunDistanceInput.value || !radiusInput.value || !populationInput.value) {
     error.innerHTML = "Fields cannot be empty.";
     return;
   }
