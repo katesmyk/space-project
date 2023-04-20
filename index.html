@@ -76,23 +76,20 @@
 									<div class="modal__input">
 										<label for="planetName">Planet Name</label>
 										<input type="text" id="planetName" placeholder="...Type something" required autocomplete="off">
-										<span></span>
 									</div>
 									<div class="modal__input">
 										<label for="sunDistance">Sun distance</label>
 										<input type="text" id="sunDistance" placeholder="...Type something" required autocomplete="off">
-										<span></span>
 									</div>
 									<div class="modal__input">
 										<label for="planetRadius">Planet Radius</label>
 										<input type="text" id="planetRadius" placeholder="...Type something" required autocomplete="off">
-										<span></span>
 									</div>
 									<div class="modal__input">
 										<label for="planetPopulation">Population</label>
 										<input type="text" id="planetPopulation" placeholder="...Type something" required autocomplete="off">
-										<span></span>
 									</div>
+									<span id="error" class="error"></span>
 								</div>
 							</div>
 							<div id="modal-footer" class="modal__footer">
@@ -105,5 +102,6 @@
 </body>
 <script src="script.js"></script>
 <script src="axiosRequests.js"></script>
+<script src="formValidation.js"></script>
 <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
 </html>

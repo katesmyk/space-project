@@ -172,19 +172,25 @@ function addProduct() {
   const planetSunDistance = sunDistanceInput.value.trim();
   const planetRadius = radiusInput.value.trim();
   const planetPopulation = populationInput.value.trim();
+  const error = document.querySelector(".error");
   
-  if (!planetName) {
-    console.log("Planet name cannot be empty.");
+  if (!planetName || !planetSunDistance || !planetRadius || !planetPopulation) {
+    error.innerHTML = "Fields cannot be empty.";
     return;
   }
 
   if (!/^[a-zA-Z]+$/.test(planetName)) {
-    console.log("Planet name must contain only alphabets.");
-    return;
+     error.innerHTML = "Planet name must contain only alphabets.";
+      return;
   }
   // Check if sun distance, radius, and population are numbers or floats
   if (isNaN(planetSunDistance) || isNaN(planetRadius) || isNaN(planetPopulation)) {
-    console.log("Sun distance, radius, and population must be numbers or floats.");
+    error.innerHTML = "Sun distance, radius, and population must be numbers.";
+    return;
+  }
+
+  if (planetSunDistance < 0 || planetRadius < 0 || planetPopulation < 0) {
+    error.innerHTML = "Sun distance, radius, and population must be positive numbers.";
     return;
   }
 
@@ -289,30 +295,32 @@ for (let i = 0; i < rows.length; i++) {
 }
 
 function editProduct() {
-  const productCard = document.querySelector(".products__item");
-  const planetNameElement = document.querySelector(".planet-name");
-  const sunDistanceElement = document.querySelector(".products__item-info > p:nth-child(2) > span");
-  const radiusElement = document.querySelector(".products__item-info > p:nth-child(3) > span");
-  const populationElement = document.querySelector(".products__item-info > p:nth-child(4) > span");
-
-  productCard.addEventListener("click", function (event) {
-    const planetName = planetNameElement.textContent;
-    const sunDistance = sunDistanceElement.textContent;
-    const radius = radiusElement.textContent;
-    const population = populationElement.textContent;
-
-    planetNameInput.value = planetName;
-    sunDistanceInput.value = sunDistance;
-    radiusInput.value = radius;
-    populationInput.value = population;
-  });
-
   const planetNameInput = document.querySelector("#planetName");
   const sunDistanceInput = document.querySelector("#sunDistance");
   const radiusInput = document.querySelector("#planetRadius");
   const populationInput = document.querySelector("#planetPopulation");
 
   const saveBtn = document.querySelector("#add-modal .modal__button.button--blue");
+
+  if(!planetNameInput || !sunDistanceInput || !radiusInput || !populationInput || !saveBtn) {
+    error.innerHTML = "Fields cannot be empty.";
+    return;
+  }
+
+  if (!/^[a-zA-Z]+$/.test(planetNameInput.value)) {
+    error.innerHTML = "Planet name must contain only alphabets.";
+    return;
+  }
+
+  if (isNaN(sunDistanceInput.value) || isNaN(radiusInput.value) || isNaN(populationInput.value)) {
+    error.innerHTML = "Sun distance, radius, and population must be numbers.";
+    return;
+  }
+
+  if (sunDistanceInput.value < 0 || radiusInput.value < 0 || populationInput.value < 0) {
+    error.innerHTML = "Sun distance, radius, and population must be positive numbers.";
+    return;
+  }
 
   // When Save Changes button is clicked, send a PUT request to update the planet data
   saveBtn.addEventListener("click", function (event) {
@@ -364,5 +372,6 @@ function editProduct() {
       });
   });
 }
+
 
 
